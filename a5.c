@@ -1,34 +1,23 @@
-/*
-5.Write a program that creates a file with a 4K bytes free space. (Such files are called files with holes.)
-*/
 #include<stdio.h>
+#include<fcntl.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
 #include<stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-char buf1[]="LAB ";
-char buf2[]="OS Linux";
-
-int main(){    
-	int fd;
-	if ((fd=creat("file.txt", 0666)) < 0) {
-		printf("Creation error");
-		exit(1);
-	}
-
-	if (write(fd, buf1, sizeof(buf1)) < 0){
-	    printf("Writing error");
-	    exit(2);
-	}
-
-	if (lseek(fd, 4096, SEEK_SET) < 0){
-	    printf("Positioning error");
-	    exit(3);
-	}
-
-	if (write(fd, buf2, sizeof(buf2)) < 0){
-	    printf("Writing error");
-	    exit(2);
-	}
+#include<string.h>
+int main(){
+    int pid,fd;
+    int i;
+    pid = fork();
+    char rbuf[50];
+    if (pid == 0){
+        fd=open("file3.txt", O_CREAT | O_RDWR, 0777);
+        
+        read(fd,rbuf,50);
+        printf("read data is:%s\n",rbuf);
+    }
+    else{
+        wait(0);
+        printf("parent running\n");
+    }
 }
